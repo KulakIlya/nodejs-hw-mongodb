@@ -1,5 +1,6 @@
-import controllerWrapper from '../decorators/controllerWrapper.js';
+import createHttpError from 'http-errors';
 import contactService from '../services/contacts.js';
+import ctrlWrapper from '../utils/ctrlWrapper.js';
 
 const getAllContacts = async (req, res, next) => {
   const contacts = await contactService.getAll();
@@ -14,10 +15,7 @@ const getAllContacts = async (req, res, next) => {
 const getContact = async (req, res, next) => {
   const contact = await contactService.getOneById(req.params.id);
 
-  if (!contact)
-    next({
-      message: 'Contact not found',
-    });
+  if (!contact) return next(createHttpError(404, 'Contact not found'));
 
   res.status(200).json({
     status: 200,
@@ -27,6 +25,6 @@ const getContact = async (req, res, next) => {
 };
 
 export default {
-  getAllContacts: controllerWrapper(getAllContacts),
-  getContact: controllerWrapper(getContact),
+  getAllContacts: ctrlWrapper(getAllContacts),
+  getContact: ctrlWrapper(getContact),
 };

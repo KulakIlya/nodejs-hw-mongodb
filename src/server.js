@@ -12,6 +12,8 @@ import env from './utils/env.js';
 const setupServer = () => {
   const app = express();
 
+  app.use(express.json());
+
   app.use(cors());
   app.use(
     pino({
@@ -21,7 +23,7 @@ const setupServer = () => {
     })
   );
 
-  app.use(contactsRouter);
+  app.use('/contacts', contactsRouter);
 
   app.use('*', notFoundHandler);
 

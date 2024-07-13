@@ -1,15 +1,29 @@
 import createHttpError from 'http-errors';
 
 import contactService from '../services/contacts.js';
-import ctrlWrapper from '../utils/ctrlWrapper.js';
 
-const getAllContacts = async (req, res, next) => {
-  const contacts = await contactService.getAll();
+import ctrlWrapper from '../utils/ctrlWrapper.js';
+import parseFilterParams from '../utils/parseFilterParams.js';
+import parsePaginationParams from '../utils/parsePaginationParams.js';
+import parseSortParams from '../utils/parseSortParams.js';
+
+const getAllContacts = async (req, res) => {
+  const { perPage, page, sortBy, sortOrder, type, isFavourite } = req.query;
+
+  const data = await contactService.getAll({
+    ...parsePaginationParams({ perPage, page }),
+    ...parseSortParams({ sortBy, sortOrder }),
+    ...parseFilterParams({ type, isFavourite }),
+  });
 
   res.status(200).json({
     status: 200,
     message: 'Successfully found contacts!',
-    data: contacts,
+    data: {
+      perPage,
+      page,
+      ...data,
+    },
   });
 };
 
@@ -25,7 +39,7 @@ const getContact = async (req, res, next) => {
   });
 };
 
-const createContact = async (req, res, next) => {
+const createContact = async (req, res) => {
   const newContact = await contactService.createContact(req.body);
 
   res.status(201).json({
@@ -49,6 +63,7 @@ const updateContact = async (req, res, next) => {
 
 const removeContact = async (req, res, next) => {
   const removedContact = await contactService.removeContact(req.params.id);
+
   if (!removedContact) return next(createHttpError(404, 'Contact not found'));
 
   res.status(204).send();

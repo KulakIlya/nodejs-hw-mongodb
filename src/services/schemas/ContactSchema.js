@@ -1,5 +1,7 @@
 import mongoose from 'mongoose';
 
+import { CONTACT_TYPE_VALUES } from '../../constants.js';
+
 const schema = new mongoose.Schema(
   {
     name: {
@@ -20,7 +22,7 @@ const schema = new mongoose.Schema(
     },
     contactType: {
       type: String,
-      enum: ['work', 'home', 'personal'],
+      enum: CONTACT_TYPE_VALUES,
       required: [true, 'ContactType is required'],
       default: 'personal',
     },

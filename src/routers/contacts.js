@@ -5,9 +5,12 @@ import contactsControllers from '../controllers/contacts.js';
 import validateBody from '../middlewares/validateBody.js';
 import validateId from '../middlewares/validateId.js';
 
-import validationSchemas from '../schemas/contacts.js';
+import authenticate from '../middlewares/authenticate.js';
+import validationSchemas from '../validation/contacts.js';
 
 const contactsRouter = express.Router();
+
+contactsRouter.use(authenticate);
 
 contactsRouter.get('/', contactsControllers.getAllContacts);
 contactsRouter.get('/:id', validateId, contactsControllers.getContact);

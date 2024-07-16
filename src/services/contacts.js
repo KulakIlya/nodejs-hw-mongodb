@@ -1,8 +1,11 @@
-import { SORT_ORDER } from '../constants.js';
+import Contact from '../db/models/contact.js';
+
 import calculatePaginationData from '../utils/calculatePaginationData.js';
-import Contact from './schemas/ContactSchema.js';
+
+import { SORT_ORDER } from '../constants.js';
 
 const getAll = async ({
+  userId,
   page,
   perPage,
   sortBy = '_id',
@@ -15,7 +18,7 @@ const getAll = async ({
   const typeFilter = type ? { contactType: { $eq: type } } : {};
   const isFavouriteFilter = isFavourite !== undefined ? { isFavourite: { $eq: isFavourite } } : {};
 
-  const contactsQuery = Contact.find({ ...typeFilter, ...isFavouriteFilter });
+  const contactsQuery = Contact.find({ userId, ...typeFilter, ...isFavouriteFilter });
   const contactsCount = await Contact.find({}).merge(contactsQuery).countDocuments();
 
   const contacts = await contactsQuery
@@ -29,12 +32,12 @@ const getAll = async ({
   return { data: contacts, page, perPage, totalItems: contactsCount, ...paginationData };
 };
 
-const getOneById = id => Contact.findById(id);
+const getOne = filter => Contact.findOne(filter);
 
 const createContact = payload => Contact.create(payload);
 
-const updateContact = (id, payload) => Contact.findByIdAndUpdate(id, payload, { new: true });
+const updateContact = (filter, payload) => Contact.findOneAndUpdate(filter, payload, { new: true });
 
-const removeContact = id => Contact.findByIdAndDelete(id);
+const removeContact = filter => Contact.findOneAndDelete(filter);
 
-export default { getAll, getOneById, createContact, updateContact, removeContact };
+export default { getAll, getOne, createContact, updateContact, removeContact };

@@ -6,25 +6,30 @@ const schema = new mongoose.Schema(
   {
     name: {
       type: String,
-      required: [true, 'Name is required'],
+      required: [true, 'name is required'],
     },
     phoneNumber: {
       type: String,
-      required: [true, 'Phone number is required'],
+      required: [true, 'phoneNumber is required'],
     },
     email: {
       type: String,
-      required: [true, 'Email is required'],
+      required: [true, 'email is required'],
     },
     isFavourite: {
       type: Boolean,
-      required: [true, 'IsFavourite is required'],
+      required: [true, 'isFavourite is required'],
     },
     contactType: {
       type: String,
       enum: CONTACT_TYPE_VALUES,
-      required: [true, 'ContactType is required'],
+      required: [true, 'contactType is required'],
       default: 'personal',
+    },
+    userId: {
+      type: String,
+      required: [true, 'userId is required'],
+      ref: 'users',
     },
   },
   { versionKey: false, timestamps: true }

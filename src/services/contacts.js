@@ -26,7 +26,7 @@ const getAll = async ({
 
   const paginationData = calculatePaginationData(contactsCount, perPage, page);
 
-  return { data: contacts, totalItems: contactsCount, ...paginationData };
+  return { data: contacts, page, perPage, totalItems: contactsCount, ...paginationData };
 };
 
 const getOneById = id => Contact.findById(id);

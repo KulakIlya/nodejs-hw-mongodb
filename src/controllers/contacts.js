@@ -20,8 +20,6 @@ const getAllContacts = async (req, res) => {
     status: 200,
     message: 'Successfully found contacts!',
     data: {
-      perPage,
-      page,
       ...data,
     },
   });

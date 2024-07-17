@@ -16,7 +16,12 @@ contactsRouter.post(
   validateBody(validationSchemas.createContact),
   contactsControllers.createContact
 );
-contactsRouter.patch('/:id', validateId, contactsControllers.updateContact);
+contactsRouter.patch(
+  '/:id',
+  validateId,
+  validateBody(validationSchemas.updateContact),
+  contactsControllers.updateContact
+);
 contactsRouter.delete('/:id', validateId, contactsControllers.removeContact);
 
 export default contactsRouter;

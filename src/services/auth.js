@@ -45,6 +45,8 @@ const refreshSession = async userId => {
 
 const deleteSession = id => Session.deleteOne({ userId: id });
 
+// const resetPassword = id => {};
+
 export default {
   findUser,
   register,

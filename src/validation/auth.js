@@ -12,7 +12,12 @@ const login = Joi.object({
   password: Joi.string().required(),
 });
 
+const resetEmail = Joi.object({
+  email: Joi.string().pattern(EMAIL_REGEX).required(),
+});
+
 export default {
   register,
   login,
+  resetEmail,
 };

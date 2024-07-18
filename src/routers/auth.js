@@ -11,6 +11,12 @@ const authRouter = express.Router();
 authRouter.post('/register', validateBody(authSchemas.register), authController.register);
 authRouter.post('/login', validateBody(authSchemas.login), authController.login);
 authRouter.post('/refresh', authController.refresh);
+authRouter.post(
+  '/send-reset-email',
+  validateBody(authSchemas.resetEmail),
+  authController.resetPassword
+);
+
 authRouter.post('/logout', authController.logout);
 
 export default authRouter;

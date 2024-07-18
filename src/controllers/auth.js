@@ -7,6 +7,8 @@ import authService from '../services/auth.js';
 
 import { COOKIES_CONFIG, SALT } from '../constants.js';
 
+import sendMail from '../utils/sendMail.js';
+
 const setupSession = (res, session) => {
   res.cookie('refreshToken', session.refreshToken, {
     ...COOKIES_CONFIG,
@@ -87,9 +89,32 @@ const logout = async (req, res, next) => {
   res.status(204).send();
 };
 
+const resetPassword = async (req, res, next) => {
+  const { email } = req.body;
+
+  const user = await authService.findUser({ email });
+
+  if (!user) next(createHttpError(404, 'User not found'));
+
+  try {
+    await sendMail({
+      to: email,
+      html: `<h1>Hello!</h1>`,
+      subject: 'Reset password',
+      // from: env(SMTP.FROM),
+      from: 'kulak1224@gmail.com',
+    });
+  } catch (error) {
+    return next(createHttpError(500, error.message));
+  }
+
+  res.status(204).send();
+};
+
 export default {
   register: ctrlWrapper(register),
   login: ctrlWrapper(login),
   refresh: ctrlWrapper(refresh),
   logout: ctrlWrapper(logout),
+  resetPassword: ctrlWrapper(resetPassword),
 };

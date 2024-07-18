@@ -13,3 +13,11 @@ export const COOKIES_CONFIG = {
   httpOnly: true,
   secure: true,
 };
+
+export const SMTP = {
+  HOST: 'SMTP_HOST',
+  PORT: 'SMTP_PORT',
+  USER: 'SMTP_USER',
+  PASSWORD: 'SMTP_PASSWORD',
+  FROM: 'SMTP_FROM',
+};

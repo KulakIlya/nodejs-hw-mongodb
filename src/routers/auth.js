@@ -17,10 +17,6 @@ authRouter.post(
   authController.resetPassword
 );
 
-<<<<<<< Updated upstream
 authRouter.post('/logout', authController.logout);
-=======
-authRouter.delete('/logout', authController.logout);
->>>>>>> Stashed changes
 
 export default authRouter;

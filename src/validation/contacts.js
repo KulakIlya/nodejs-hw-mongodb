@@ -12,6 +12,7 @@ const createContact = Joi.object({
     .max(20)
     .valid(...CONTACT_TYPE_VALUES)
     .required(),
+  photo: Joi.string(),
 });
 
 const updateContact = Joi.object({
@@ -23,6 +24,7 @@ const updateContact = Joi.object({
     .min(3)
     .max(20)
     .valid(...CONTACT_TYPE_VALUES),
+  photo: Joi.string(),
 });
 
 export default { createContact, updateContact };

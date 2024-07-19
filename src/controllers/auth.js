@@ -5,8 +5,9 @@ import ctrlWrapper from '../utils/ctrlWrapper.js';
 
 import authService from '../services/auth.js';
 
-import { COOKIES_CONFIG, SALT } from '../constants.js';
+import { COOKIES_CONFIG, SALT, SMTP } from '../constants.js';
 
+import env from '../utils/env.js';
 import sendMail from '../utils/sendMail.js';
 
 const setupSession = (res, session) => {
@@ -101,8 +102,8 @@ const resetPassword = async (req, res, next) => {
       to: email,
       html: `<h1>Hello!</h1>`,
       subject: 'Reset password',
-      // from: env(SMTP.FROM),
-      from: 'kulak1224@gmail.com',
+      from: env(SMTP.FROM),
+      // from: 'kulak1224@gmail.com',
     });
   } catch (error) {
     return next(createHttpError(500, error.message));

@@ -31,6 +31,9 @@ const schema = new mongoose.Schema(
       required: [true, 'userId is required'],
       ref: 'users',
     },
+    photo: {
+      type: String,
+    },
   },
   { versionKey: false, timestamps: true }
 );

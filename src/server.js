@@ -1,3 +1,4 @@
+import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express from 'express';
 import pino from 'pino-http';
@@ -8,7 +9,7 @@ import contactsRouter from './routers/contacts.js';
 import errorHandler from './middlewares/errorHandler.js';
 import notFoundHandler from './middlewares/notFoundHandler.js';
 
-import cookieParser from 'cookie-parser';
+import { UPLOAD_DIR } from './constants.js';
 import env from './utils/env.js';
 
 const setupServer = () => {
@@ -26,6 +27,7 @@ const setupServer = () => {
     })
   );
 
+  app.use('/uploads', express.static(UPLOAD_DIR));
   app.use('/contacts', contactsRouter);
   app.use('/auth', authRouter);
 

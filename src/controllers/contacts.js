@@ -6,6 +6,11 @@ import ctrlWrapper from '../utils/ctrlWrapper.js';
 import parseFilterParams from '../utils/parseFilterParams.js';
 import parsePaginationParams from '../utils/parsePaginationParams.js';
 import parseSortParams from '../utils/parseSortParams.js';
+import saveFileToUploadDir from '../utils/saveFileToUploadDir.js';
+
+const getPhotoURL = async file => {
+  if (file) return await saveFileToUploadDir(file);
+};
 
 const getAllContacts = async (req, res) => {
   const { perPage, page, sortBy, sortOrder, type, isFavourite } = req.query;
@@ -39,7 +44,13 @@ const getContact = async (req, res, next) => {
 };
 
 const createContact = async (req, res) => {
-  const newContact = await contactService.createContact({ userId: req.user._id, ...req.body });
+  const photo = await getPhotoURL(req.file);
+
+  const newContact = await contactService.createContact({
+    userId: req.user._id,
+    ...req.body,
+    photo,
+  });
 
   res.status(201).json({
     status: 201,
@@ -49,9 +60,11 @@ const createContact = async (req, res) => {
 };
 
 const updateContact = async (req, res, next) => {
+  const photo = await getPhotoURL(req.file);
+
   const newContact = await contactService.updateContact(
     { _id: req.params.id, userId: req.user._id },
-    req.body
+    { ...req.body, photo }
   );
 
   if (!newContact) return next(createHttpError(404, 'Contact not found'));

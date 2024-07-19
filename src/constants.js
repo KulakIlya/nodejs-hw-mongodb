@@ -1,3 +1,5 @@
+import path from 'node:path';
+
 export const SORT_ORDER = { ASC: 'asc', DESC: 'desc' };
 
 export const CONTACT_TYPE_VALUES = ['work', 'home', 'personal'];
@@ -21,3 +23,6 @@ export const SMTP = {
   PASSWORD: 'SMTP_PASSWORD',
   FROM: 'SMTP_FROM',
 };
+
+export const TEMP_UPLOAD_DIR = path.resolve('temp');
+export const UPLOAD_DIR = path.resolve('uploads');

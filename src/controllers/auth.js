@@ -47,7 +47,9 @@ const login = async (req, res, next) => {
   res.status(200).json({
     status: 200,
     message: 'Successfully logged in an user!',
-    data: session.accessToken,
+    data: {
+      accessToken: session.accessToken,
+    },
   });
 };
 
@@ -72,7 +74,7 @@ const refresh = async (req, res, next) => {
 
 const logout = async (req, res, next) => {
   const { userId } = req.cookies;
-  if (!userId) return next(401, 'User ID is incorrect');
+  if (!userId) return next(createHttpError(401, 'User ID is incorrect'));
 
   await authService.logout(userId);
 

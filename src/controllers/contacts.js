@@ -50,7 +50,7 @@ const createContact = async (req, res) => {
 
 const updateContact = async (req, res, next) => {
   const newContact = await contactService.updateContact(
-    { id: req.params.id, userId: req.user._id },
+    { _id: req.params.id, userId: req.user._id },
     req.body
   );
 
@@ -65,7 +65,7 @@ const updateContact = async (req, res, next) => {
 
 const removeContact = async (req, res, next) => {
   const removedContact = await contactService.removeContact({
-    id: req.params.id,
+    _id: req.params.id,
     userId: req.user._id,
   });
 

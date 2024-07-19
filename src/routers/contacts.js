@@ -24,6 +24,7 @@ contactsRouter.post(
 contactsRouter.patch(
   '/:id',
   validateId,
+  upload.single('photo'),
   validateBody(validationSchemas.updateContact),
   contactsControllers.updateContact
 );

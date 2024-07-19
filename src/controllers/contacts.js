@@ -2,14 +2,21 @@ import createHttpError from 'http-errors';
 
 import contactService from '../services/contacts.js';
 
+import { CLOUDINARY } from '../constants.js';
 import ctrlWrapper from '../utils/ctrlWrapper.js';
+import env from '../utils/env.js';
 import parseFilterParams from '../utils/parseFilterParams.js';
 import parsePaginationParams from '../utils/parsePaginationParams.js';
 import parseSortParams from '../utils/parseSortParams.js';
 import saveFileToUploadDir from '../utils/saveFileToUploadDir.js';
+import saveToCloudinary from '../utils/saveToCloudinary.js';
 
-const getPhotoURL = async file => {
-  if (file) return await saveFileToUploadDir(file);
+const getPhotoURL = file => {
+  if (!file) return;
+
+  if (!env(CLOUDINARY.ENABLED)) return saveFileToUploadDir(file);
+
+  return saveToCloudinary(file);
 };
 
 const getAllContacts = async (req, res) => {

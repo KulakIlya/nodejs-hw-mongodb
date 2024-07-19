@@ -26,3 +26,10 @@ export const SMTP = {
 
 export const TEMP_UPLOAD_DIR = path.resolve('temp');
 export const UPLOAD_DIR = path.resolve('uploads');
+
+export const CLOUDINARY = {
+  ENABLED: 'ENABLE_CLOUDINARY',
+  NAME: 'CLOUDINARY_NAME',
+  API_KEY: 'CLOUDINARY_API_KEY',
+  API_SECRET: 'CLOUDINARY_API_SECRET',
+};

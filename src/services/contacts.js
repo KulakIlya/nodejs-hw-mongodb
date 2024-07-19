@@ -36,7 +36,8 @@ const getOne = filter => Contact.findOne(filter);
 
 const createContact = payload => Contact.create(payload);
 
-const updateContact = (filter, payload) => Contact.findOneAndUpdate(filter, payload, { new: true });
+const updateContact = (filter, payload) =>
+  Contact.findOneAndUpdate(filter, payload, { new: true, upsert: true });
 
 const removeContact = filter => Contact.findOneAndDelete(filter);
 

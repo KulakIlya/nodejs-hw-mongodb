@@ -69,6 +69,9 @@ const refresh = async (req, res, next) => {
   res.status(200).json({
     status: 200,
     message: 'Successfully refreshed a session!',
+    data: {
+      accessToken: newSession.accessToken,
+    },
   });
 };
 

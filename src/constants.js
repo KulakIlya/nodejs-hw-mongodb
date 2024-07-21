@@ -24,8 +24,8 @@ export const SMTP = {
   FROM: 'SMTP_FROM',
 };
 
-export const TEMP_UPLOAD_DIR = path.resolve('temp');
-export const UPLOAD_DIR = path.resolve('uploads');
+export const TEMP_UPLOAD_DIR = path.resolve('src', 'temp');
+export const UPLOAD_DIR = path.resolve('src', 'uploads');
 
 export const CLOUDINARY = {
   ENABLED: 'ENABLE_CLOUDINARY',

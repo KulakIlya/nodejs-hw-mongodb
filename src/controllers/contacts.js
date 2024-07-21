@@ -2,7 +2,6 @@ import createHttpError from 'http-errors';
 
 import contactService from '../services/contacts.js';
 
-import { CLOUDINARY } from '../constants.js';
 import ctrlWrapper from '../utils/ctrlWrapper.js';
 import env from '../utils/env.js';
 import parseFilterParams from '../utils/parseFilterParams.js';
@@ -11,12 +10,14 @@ import parseSortParams from '../utils/parseSortParams.js';
 import saveFileToUploadDir from '../utils/saveFileToUploadDir.js';
 import saveToCloudinary from '../utils/saveToCloudinary.js';
 
+import { CLOUDINARY } from '../constants.js';
+
 const getPhotoURL = file => {
   if (!file) return;
 
-  if (!env(CLOUDINARY.ENABLED)) return saveFileToUploadDir(file);
+  if (env(CLOUDINARY.ENABLED) === 'true') return saveToCloudinary(file);
 
-  return saveToCloudinary(file);
+  return saveFileToUploadDir(file);
 };
 
 const getAllContacts = async (req, res) => {
@@ -67,7 +68,10 @@ const createContact = async (req, res) => {
 };
 
 const updateContact = async (req, res, next) => {
+  console.log(req.file);
   const photo = await getPhotoURL(req.file);
+
+  // console.log(photo);
 
   const newContact = await contactService.updateContact(
     { _id: req.params.id, userId: req.user._id },

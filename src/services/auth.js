@@ -45,7 +45,11 @@ const refreshSession = async userId => {
 
 const deleteSession = id => Session.deleteOne({ userId: id });
 
-// const resetPassword = id => {};
+const resetPassword = async (id, newPassword) => {
+  await deleteSession(id);
+
+  return User.findByIdAndUpdate(id, { password: newPassword }, { new: true });
+};
 
 export default {
   findUser,
@@ -55,4 +59,5 @@ export default {
   findSession,
   createSession,
   refreshSession,
+  resetPassword,
 };

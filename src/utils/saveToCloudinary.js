@@ -1,6 +1,8 @@
 import { v2 as cloudinary } from 'cloudinary';
+import fs from 'node:fs/promises';
+import path from 'node:path';
 
-import { CLOUDINARY } from '../constants.js';
+import { CLOUDINARY, TEMP_UPLOAD_DIR } from '../constants.js';
 import env from '../utils/env.js';
 
 cloudinary.config({
@@ -12,6 +14,7 @@ cloudinary.config({
 
 const saveToCloudinary = async file => {
   const uploadResult = await cloudinary.uploader.upload(file.path);
+  await fs.unlink(path.join(TEMP_UPLOAD_DIR, file.filename));
 
   return uploadResult.secure_url;
 };

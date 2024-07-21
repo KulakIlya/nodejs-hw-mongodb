@@ -1,5 +1,9 @@
 import bcrypt from 'bcrypt';
+import handlebars from 'handlebars';
 import createHttpError from 'http-errors';
+import jwt from 'jsonwebtoken';
+import fs from 'node:fs/promises';
+import path from 'node:path';
 
 import ctrlWrapper from '../utils/ctrlWrapper.js';
 
@@ -9,6 +13,8 @@ import { COOKIES_CONFIG, SALT, SMTP } from '../constants.js';
 
 import env from '../utils/env.js';
 import sendMail from '../utils/sendMail.js';
+
+const TEMPLATES_DIR = path.resolve('src', 'templates');
 
 const setupSession = (res, session) => {
   res.cookie('refreshToken', session.refreshToken, {
@@ -90,26 +96,74 @@ const logout = async (req, res, next) => {
   res.status(204).send();
 };
 
-const resetPassword = async (req, res, next) => {
+const requestPasswordReset = async (req, res, next) => {
   const { email } = req.body;
 
   const user = await authService.findUser({ email });
 
   if (!user) next(createHttpError(404, 'User not found'));
 
+  const token = jwt.sign(
+    {
+      id: user._id,
+      email,
+    },
+    env('JWT_SECRET'),
+    {
+      expiresIn: '5m',
+    }
+  );
+
+  const templatePath = path.join(TEMPLATES_DIR, 'reset-password-email.html');
+
+  const templateSrc = (await fs.readFile(templatePath)).toString();
+
+  const template = handlebars.compile(templateSrc);
+
+  const html = template({
+    name: user.name,
+    link: `${env('APP_DOMAIN')}/auth/reset-password?token=${token}`,
+  });
+
   try {
     await sendMail({
       to: email,
-      html: `<h1>Hello!</h1>`,
       subject: 'Reset password',
       from: env(SMTP.FROM),
-      // from: 'kulak1224@gmail.com',
+      html,
     });
-  } catch (error) {
-    return next(createHttpError(500, error.message));
+  } catch {
+    return next(createHttpError(500, 'Failed to send the email, please try again later.'));
   }
 
-  res.status(204).send();
+  res.status(204).json({
+    status: 200,
+    message: 'Reset password email has been successfully sent.',
+    data: {},
+  });
+};
+
+const resetPassword = async (req, res, next) => {
+  const { token } = req.query;
+
+  if (!token) return next(createHttpError(401, 'Token is expired or invalid.'));
+
+  if (!jwt.verify(token, env('JWT_SECRET')))
+    return next(createHttpError(401, 'Token is expired or invalid.'));
+
+  const { id } = jwt.decode(token);
+
+  const user = await authService.findUser({ _id: id });
+
+  if (!user) return next(createHttpError(404, 'User not found'));
+
+  await authService.resetPassword(id, await bcrypt.hash(req.body.password, SALT));
+
+  res.status(200).json({
+    status: 200,
+    message: 'Password has been successfully reset.',
+    data: {},
+  });
 };
 
 export default {
@@ -117,5 +171,6 @@ export default {
   login: ctrlWrapper(login),
   refresh: ctrlWrapper(refresh),
   logout: ctrlWrapper(logout),
+  requestPasswordReset: ctrlWrapper(requestPasswordReset),
   resetPassword: ctrlWrapper(resetPassword),
 };

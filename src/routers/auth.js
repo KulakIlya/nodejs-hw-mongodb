@@ -13,7 +13,12 @@ authRouter.post('/login', validateBody(authSchemas.login), authController.login)
 authRouter.post('/refresh', authController.refresh);
 authRouter.post(
   '/send-reset-email',
-  validateBody(authSchemas.resetEmail),
+  validateBody(authSchemas.requestPasswordReset),
+  authController.requestPasswordReset
+);
+authRouter.post(
+  '/reset-pwd',
+  validateBody(authSchemas.resetPassword),
   authController.resetPassword
 );
 

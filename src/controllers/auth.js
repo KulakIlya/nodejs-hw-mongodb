@@ -132,15 +132,15 @@ const requestPasswordReset = async (req, res, next) => {
       from: env(SMTP.FROM),
       html,
     });
+
+    res.status(200).json({
+      status: 200,
+      message: 'Reset password email has been successfully sent.',
+      data: {},
+    });
   } catch {
     return next(createHttpError(500, 'Failed to send the email, please try again later.'));
   }
-
-  res.status(204).json({
-    status: 200,
-    message: 'Reset password email has been successfully sent.',
-    data: {},
-  });
 };
 
 const resetPassword = async (req, res, next) => {

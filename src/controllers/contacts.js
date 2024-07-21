@@ -68,10 +68,7 @@ const createContact = async (req, res) => {
 };
 
 const updateContact = async (req, res, next) => {
-  console.log(req.file);
   const photo = await getPhotoURL(req.file);
-
-  // console.log(photo);
 
   const newContact = await contactService.updateContact(
     { _id: req.params.id, userId: req.user._id },

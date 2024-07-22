@@ -27,6 +27,11 @@ const setupSession = (res, session) => {
   });
 };
 
+const removeSession = res => {
+  res.clearCookie('userId');
+  res.clearCookie('refreshToken');
+};
+
 const register = async (req, res, next) => {
   const user = await authService.findUser({ email: req.body.email });
   if (user) return next(createHttpError(409, 'Email in use'));
@@ -90,8 +95,7 @@ const logout = async (req, res, next) => {
 
   await authService.logout(userId);
 
-  res.clearCookie('userId');
-  res.clearCookie('refreshToken');
+  removeSession(res);
 
   res.status(204).send();
 };
@@ -144,7 +148,7 @@ const requestPasswordReset = async (req, res, next) => {
 };
 
 const resetPassword = async (req, res, next) => {
-  const { token } = req.query;
+  const { token, password } = req.body;
 
   if (!token) return next(createHttpError(401, 'Token is expired or invalid.'));
 
@@ -157,7 +161,8 @@ const resetPassword = async (req, res, next) => {
 
   if (!user) return next(createHttpError(404, 'User not found'));
 
-  await authService.resetPassword(id, await bcrypt.hash(req.body.password, SALT));
+  await authService.resetPassword(id, await bcrypt.hash(password, SALT));
+  removeSession(res);
 
   res.status(200).json({
     status: 200,

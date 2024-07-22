@@ -43,13 +43,13 @@ const refreshSession = async userId => {
   return Session.create({ userId, ...session });
 };
 
-const deleteSession = id => Session.deleteOne({ userId: id });
-
 const resetPassword = async (id, newPassword) => {
   await deleteSession(id);
 
   return User.findByIdAndUpdate(id, { password: newPassword }, { new: true });
 };
+
+const deleteSession = id => Session.deleteOne({ userId: id });
 
 export default {
   findUser,

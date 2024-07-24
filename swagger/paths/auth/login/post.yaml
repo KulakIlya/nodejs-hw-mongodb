@@ -42,7 +42,14 @@ responses:
               type: string
               example: Successfully logged in a user!
             data:
-              $ref: ../../../components/schemas/user.yaml
+              type: object
+              required:
+                - accessToken
+              properties:
+                accessToken:
+                  type: string
+                  example: ksIErcdA0oBwLX79f4bPcYXWKyEX/hcN6OcDU1Ll
+
   '400':
     $ref: ../../../components/responses/400.yaml
   '404':

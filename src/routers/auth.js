@@ -21,7 +21,6 @@ authRouter.post(
   validateBody(authSchemas.resetPassword),
   authController.resetPassword
 );
-
 authRouter.post('/logout', authController.logout);
 
 export default authRouter;

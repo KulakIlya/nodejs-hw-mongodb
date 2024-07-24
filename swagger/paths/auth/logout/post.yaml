@@ -1,0 +1,11 @@
+tags:
+  - Auth
+summary: Log out user
+description: Logs out user
+operationId: logoutUser
+security: []
+responses:
+  '204':
+    description: OK
+  '401':
+    $ref: ../../../components/responses/401.yaml

@@ -3,8 +3,7 @@ tags:
 summary: Login user
 description: Logins user and returns it
 operationId: loginUser
-security:
-  - bearerAuth: []
+security: []
 requestBody:
   description: User data
   content:
@@ -49,7 +48,6 @@ responses:
                 accessToken:
                   type: string
                   example: ksIErcdA0oBwLX79f4bPcYXWKyEX/hcN6OcDU1Ll
-
   '400':
     $ref: ../../../components/responses/400.yaml
   '404':

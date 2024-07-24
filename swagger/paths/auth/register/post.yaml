@@ -3,8 +3,7 @@ tags:
 summary: Register user
 description: Registers user and returns it
 operationId: registerUser
-security:
-  - bearerAuth: []
+security: []
 requestBody:
   description: User data
   content:

@@ -3,7 +3,8 @@ tags:
 summary: Log out user
 description: Logs out user
 operationId: logoutUser
-security: []
+security:
+  - cookieAuthUserId: []
 responses:
   '204':
     description: OK

@@ -4,7 +4,8 @@ summary: Refresh user tokens
 description: Refreshes user tokens and returns new access token
 operationId: refreshUser
 security:
-  - cookieAuth: []
+  - cookieAuthUserId: []
+  - cookieAuthRefreshToken: []
 responses:
   '200':
     description: OK

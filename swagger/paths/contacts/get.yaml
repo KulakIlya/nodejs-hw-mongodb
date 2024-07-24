@@ -36,6 +36,13 @@ parameters:
     schema:
       type: string
     example: home
+  - name: sortOrder
+    in: query
+    schema:
+      type: string
+      enum: ['asc', 'desc']
+      example: 'asc'
+    description: All contact's fields can be mentioned. Default value - _id
 responses:
   '200':
     description: OK
@@ -47,6 +54,12 @@ responses:
             - status
             - message
             - data
+            - page
+            - perPage
+            - totalItems
+            - totalPages
+            - hasNextPage
+            - hasPreviousPage
           properties:
             status:
               type: integer
@@ -58,6 +71,18 @@ responses:
               type: array
               items:
                 $ref: ../../components/schemas/contact.yaml
+            perPage:
+              type: integer
+              example: 2
+            totalItems:
+              type: integer
+              example: 10
+            hasNextPage:
+              type: boolean
+              example: false
+            hasPreviousPage:
+              type: boolean
+              example: true
   '400':
     $ref: ../../components/responses/400.yaml
   '401':
